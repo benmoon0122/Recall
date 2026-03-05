@@ -5,7 +5,7 @@ export function Sources() {
       <div className="px-6 py-6">
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-[24px] font-semibold text-text-primary">
+            <h1 className="text-[24px] font-heading font-semibold text-text-primary">
               Sources
             </h1>
             <p className="text-[14px] text-text-secondary mt-1">
@@ -27,17 +27,17 @@ export function Sources() {
         <div className="glass-card rounded-xl p-5 mt-5">
           <div className="flex items-center gap-8">
             <div>
-              <p className="text-[24px] font-semibold text-text-primary leading-tight">97,756</p>
+              <p className="text-[24px] font-heading font-semibold text-text-primary leading-tight">134,216</p>
               <p className="text-[12px] text-text-secondary mt-0.5">Total Items Indexed</p>
             </div>
             <div className="w-px h-8 bg-white/[0.08]" />
             <div>
-              <p className="text-[24px] font-semibold text-text-primary leading-tight">3</p>
+              <p className="text-[24px] font-heading font-semibold text-text-primary leading-tight">5</p>
               <p className="text-[12px] text-text-secondary mt-0.5">Connected Sources</p>
             </div>
             <div className="w-px h-8 bg-white/[0.08]" />
             <div>
-              <p className="text-[24px] font-semibold text-text-primary leading-tight">2m ago</p>
+              <p className="text-[24px] font-heading font-semibold text-text-primary leading-tight">2m ago</p>
               <p className="text-[12px] text-text-secondary mt-0.5">Last Sync</p>
             </div>
           </div>
@@ -82,7 +82,7 @@ export function Sources() {
               <div className="bg-white/[0.03] border border-white/[0.05] rounded-lg px-3 py-2.5">
                 <p className="text-[11px] text-text-muted">Last Sync</p>
                 <p className="text-[14px] font-semibold text-text-primary mt-0.5">
-                  5m ago
+                  2m ago
                 </p>
               </div>
             </div>
@@ -130,7 +130,7 @@ export function Sources() {
               <div className="bg-white/[0.03] border border-white/[0.05] rounded-lg px-3 py-2.5">
                 <p className="text-[11px] text-text-muted">Last Sync</p>
                 <p className="text-[14px] font-semibold text-text-primary mt-0.5">
-                  10m ago
+                  8m ago
                 </p>
               </div>
             </div>
@@ -151,7 +151,7 @@ export function Sources() {
             </div>
           </div>
 
-          {/* Meeting Transcripts Card (Syncing) */}
+          {/* Meeting Notes Card (Syncing) */}
           <div className="glass-card rounded-xl p-6 flex flex-col">
             <div className="flex items-start justify-between mb-5">
               <div className="w-12 h-12 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center">
@@ -166,7 +166,7 @@ export function Sources() {
             </div>
 
             <h3 className="text-[16px] font-semibold text-text-primary">
-              Meeting Transcripts
+              Meeting Notes
             </h3>
             <p className="text-[13px] text-text-secondary mt-0.5 mb-5">
               Audio & Video
@@ -176,7 +176,7 @@ export function Sources() {
               <div className="bg-white/[0.03] border border-white/[0.05] rounded-lg px-3 py-2.5">
                 <p className="text-[11px] text-text-muted">Transcripts</p>
                 <p className="text-[14px] font-semibold text-text-primary mt-0.5">
-                  218
+                  418
                 </p>
               </div>
               <div className="bg-white/[0.03] border border-white/[0.05] rounded-lg px-3 py-2.5">
@@ -214,6 +214,106 @@ export function Sources() {
             </div>
           </div>
 
+          {/* GitHub Card */}
+          <div className="glass-card rounded-xl p-6 flex flex-col">
+            <div className="flex items-start justify-between mb-5">
+              <div className="w-12 h-12 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center">
+                <span className="material-symbols-outlined text-[24px] text-source-code">
+                  code
+                </span>
+              </div>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 backdrop-blur-sm border border-emerald-500/20 text-emerald-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                Connected
+              </span>
+            </div>
+
+            <h3 className="text-[16px] font-semibold text-text-primary">GitHub</h3>
+            <p className="text-[13px] text-text-secondary mt-0.5 mb-5">
+              Source Control
+            </p>
+
+            <div className="grid grid-cols-2 gap-3 mb-5">
+              <div className="bg-white/[0.03] border border-white/[0.05] rounded-lg px-3 py-2.5">
+                <p className="text-[11px] text-text-muted">Commits</p>
+                <p className="text-[14px] font-semibold text-text-primary mt-0.5">
+                  34.2k
+                </p>
+              </div>
+              <div className="bg-white/[0.03] border border-white/[0.05] rounded-lg px-3 py-2.5">
+                <p className="text-[11px] text-text-muted">Last Sync</p>
+                <p className="text-[14px] font-semibold text-text-primary mt-0.5">
+                  5m ago
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-auto flex items-center justify-between pt-4 border-t border-white/[0.06]">
+              <span className="text-[12px] text-text-muted">
+                Auto-sync enabled
+              </span>
+              <button
+                type="button"
+                className="flex items-center gap-1.5 text-[13px] text-text-secondary hover:text-text-primary transition-colors cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[16px]">
+                  settings
+                </span>
+                Manage
+              </button>
+            </div>
+          </div>
+
+          {/* Amazon S3 Documents Card */}
+          <div className="glass-card rounded-xl p-6 flex flex-col">
+            <div className="flex items-start justify-between mb-5">
+              <div className="w-12 h-12 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center">
+                <span className="material-symbols-outlined text-[24px] text-[#22d3ee]">
+                  cloud
+                </span>
+              </div>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 backdrop-blur-sm border border-emerald-500/20 text-emerald-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                Connected
+              </span>
+            </div>
+
+            <h3 className="text-[16px] font-semibold text-text-primary">Amazon S3</h3>
+            <p className="text-[13px] text-text-secondary mt-0.5 mb-5">
+              Documents & Files
+            </p>
+
+            <div className="grid grid-cols-2 gap-3 mb-5">
+              <div className="bg-white/[0.03] border border-white/[0.05] rounded-lg px-3 py-2.5">
+                <p className="text-[11px] text-text-muted">Documents</p>
+                <p className="text-[14px] font-semibold text-text-primary mt-0.5">
+                  1.8k
+                </p>
+              </div>
+              <div className="bg-white/[0.03] border border-white/[0.05] rounded-lg px-3 py-2.5">
+                <p className="text-[11px] text-text-muted">Last Sync</p>
+                <p className="text-[14px] font-semibold text-text-primary mt-0.5">
+                  1m ago
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-auto flex items-center justify-between pt-4 border-t border-white/[0.06]">
+              <span className="text-[12px] text-text-muted">
+                Auto-sync enabled
+              </span>
+              <button
+                type="button"
+                className="flex items-center gap-1.5 text-[13px] text-text-secondary hover:text-text-primary transition-colors cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[16px]">
+                  settings
+                </span>
+                Manage
+              </button>
+            </div>
+          </div>
+
           {/* Add New Source Card */}
           <div className="glass-card rounded-xl border-dashed min-h-[280px] flex flex-col items-center justify-center text-center p-6 cursor-pointer group hover:border-primary/30">
             <div className="w-16 h-16 rounded-full bg-white/[0.04] border border-white/[0.06] flex items-center justify-center mb-4 group-hover:border-primary/30 group-hover:bg-primary/5 transition-all">
@@ -225,7 +325,7 @@ export function Sources() {
               Add New Source
             </h3>
             <p className="text-[13px] text-text-secondary max-w-[240px]">
-              Connect Notion, Jira, Linear, and more
+              Connect Confluence, Jira, Notion, and more
             </p>
           </div>
         </div>

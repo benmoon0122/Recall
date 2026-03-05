@@ -1,14 +1,15 @@
 import { useState, type FormEvent, type KeyboardEvent } from "react";
 import { useNavigate } from "react-router";
 import Aurora from "../components/reactbits/Aurora";
-import BlurText from "../components/reactbits/BlurText";
+import SplitText from "../components/reactbits/SplitText";
 import SpotlightCard from "../components/reactbits/SpotlightCard";
+import OrbShader from "../components/OrbShader";
 import type { SourceType } from "../types";
 
 const actionPills = [
-  { label: "Search Slack", icon: "tag" },
-  { label: "Find Decisions", icon: "gavel" },
-  { label: "Summarize Thread", icon: "summarize" },
+  { label: "Search AWS Docs", icon: "cloud", query: "What's our CloudFront caching strategy?" },
+  { label: "Find Decisions", icon: "gavel", query: "Why did we choose Lambda over ECS for the payment service?" },
+  { label: "Trace Architecture", icon: "account_tree", query: "What's our Amazon Nova integration architecture?" },
 ];
 
 const recentCards: {
@@ -20,10 +21,11 @@ const recentCards: {
   icon: string;
   color: string;
   action: string;
+  query: string;
 }[] = [
-  { type: "slack", title: "Rate limiting discussion", subtitle: "Search across Slack threads and find key decisions instantly.", time: "2h ago", id: "src_001", icon: "chat", color: "text-source-slack", action: "Search Slack" },
-  { type: "meeting", title: "Architecture Review", subtitle: "Turn meeting transcripts into structured notes and action items.", time: "Yesterday", id: "src_002", icon: "videocam", color: "text-source-meeting", action: "View Notes" },
-  { type: "gmail", title: "Database migration plan", subtitle: "Surface critical email threads and extract decisions automatically.", time: "3d ago", id: "src_003", icon: "mail", color: "text-source-gmail", action: "Find Emails" },
+  { type: "slack", title: "Lambda cold start optimization", subtitle: "Discover how the team reduced Lambda cold starts by 60% using SnapStart.", time: "1h ago", id: "src_001", icon: "chat", color: "text-source-slack", action: "View Thread", query: "Why did we choose Lambda over ECS for the payment service?" },
+  { type: "meeting", title: "Nova AI Architecture Review", subtitle: "Meeting notes from the Bedrock integration planning session with the ML team.", time: "Yesterday", id: "src_002", icon: "videocam", color: "text-source-meeting", action: "View Thread", query: "What's our Amazon Nova integration architecture?" },
+  { type: "gmail", title: "DynamoDB capacity planning", subtitle: "Engineering email thread about single-table design patterns for the payment service.", time: "2d ago", id: "src_003", icon: "mail", color: "text-source-gmail", action: "View Thread", query: "How does our DynamoDB single-table design work?" },
 ];
 
 export function Home() {
@@ -59,15 +61,21 @@ export function Home() {
       {/* Main content */}
       <div className="flex-1 flex flex-col items-center justify-center px-4 -mt-8 relative z-10">
         <div className="max-w-[680px] w-full flex flex-col items-center gap-5">
-          {/* 3D Cosmic Orb */}
-          <div className="cosmic-orb mb-2" />
+          {/* Glowing Orb */}
+          <OrbShader className="w-[220px] h-[220px] mb-2" />
 
           {/* Headline */}
-          <BlurText
+          <SplitText
             text="Ready to Create Something New?"
-            className="text-[36px] font-bold text-text-primary text-center leading-tight"
-            animateBy="words"
-            delay={80}
+            className="text-[34px] font-heading font-semibold text-[#c084fc] leading-tight tracking-[-0.02em]"
+            delay={30}
+            duration={0.8}
+            ease="power3.out"
+            splitType="chars"
+            from={{ opacity: 0, y: 40 }}
+            to={{ opacity: 1, y: 0 }}
+            threshold={0.1}
+            rootMargin="-50px"
           />
 
           {/* Action pills */}
@@ -76,6 +84,7 @@ export function Home() {
               <button
                 key={pill.label}
                 type="button"
+                onClick={() => navigate(`/chat/new?q=${encodeURIComponent(pill.query)}`)}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-button text-sm text-text-secondary hover:text-text-primary cursor-pointer"
               >
                 {pill.label}
@@ -139,7 +148,7 @@ export function Home() {
                 key={card.id}
                 className="glass-card rounded-xl p-5 cursor-pointer"
               >
-                <div onClick={() => navigate(`/source/${card.id}`)} className="relative z-10 flex flex-col h-full">
+                <div onClick={() => navigate(`/chat/new?q=${encodeURIComponent(card.query)}`)} className="relative z-10 flex flex-col h-full">
                   <div className="flex items-center justify-between mb-3">
                     <div className="w-10 h-10 rounded-lg bg-white/[0.06] flex items-center justify-center">
                       <span className={`material-symbols-outlined text-[20px] ${card.color}`}>{card.icon}</span>

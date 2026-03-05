@@ -27,7 +27,7 @@ export function Sidebar() {
         <div className="w-7 h-7 rounded-lg bg-white/[0.06] border border-white/[0.08] flex items-center justify-center">
           <span className="material-symbols-outlined text-[18px] text-white">memory</span>
         </div>
-        <span className="text-[15px] font-semibold tracking-tight text-primary">Recall</span>
+        <span className="text-[15px] font-heading font-semibold tracking-tight text-white">Recall</span>
       </div>
 
       {/* New Chat button */}

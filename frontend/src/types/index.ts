@@ -53,10 +53,13 @@ export interface TopicData {
   updated: string;
 }
 
+export type NodeGroup = "project" | "data" | "infrastructure" | "frontend" | "security" | "devops";
+
 export interface GraphNode {
   id: string;
   label: string;
   size: number;
+  group: NodeGroup;
 }
 
 export interface GraphEdge {

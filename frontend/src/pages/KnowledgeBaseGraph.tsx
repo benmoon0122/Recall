@@ -11,7 +11,7 @@ export function KnowledgeBaseGraph() {
       <div className="px-6 py-6">
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-[24px] font-semibold text-text-primary">
+            <h1 className="text-[24px] font-heading font-semibold text-text-primary">
               Knowledge Base
             </h1>
             <p className="text-[14px] text-text-secondary mt-1">

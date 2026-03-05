@@ -4,7 +4,7 @@ export function Settings() {
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-6 border-b border-white/[0.06]">
         <div>
-          <h1 className="text-[24px] font-semibold text-text-primary">Settings</h1>
+          <h1 className="text-[24px] font-heading font-semibold text-text-primary">Settings</h1>
           <p className="text-[14px] text-text-secondary mt-1">
             Manage your account preferences, API keys, and workspace
           </p>
