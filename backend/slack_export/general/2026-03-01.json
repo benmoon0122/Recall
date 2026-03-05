@@ -1,0 +1,12 @@
+[
+  {
+    "ts": "1700000000.000100",
+    "user": "U123",
+    "text": "We should store embeddings in pgvector."
+  },
+  {
+    "ts": "1700000060.000200",
+    "user": "U456",
+    "text": "Agreed. Let's use Nova embeddings and retrieve top-k."
+  }
+]

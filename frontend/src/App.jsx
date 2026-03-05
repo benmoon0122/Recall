@@ -17,6 +17,7 @@ import linkIcon from './assets/link.svg'
 import lockIcon from './assets/lock.svg'
 import cancelIcon from './assets/cancel.svg'
 import { useEffect, useRef, useState } from 'react'
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL ?? "http://localhost:8000";
 
 function Icon({ children }) {
   return <span className="icon">{children}</span>
@@ -402,31 +403,77 @@ function App() {
     }
   }
 
-  const handleSearchSubmit = (event) => {
-    event.preventDefault()
-    const normalizedQuery = query.trim()
-    if (!normalizedQuery) return
+  const handleSearchSubmit = async (event) => {
+  event.preventDefault()
+  const normalizedQuery = query.trim()
+  if (!normalizedQuery) return
 
-    const existingChat = chats.find(
-      (chat) => chat.title.toLowerCase() === normalizedQuery.toLowerCase(),
-    )
-    const nextChat = existingChat ?? buildChatFromQuery(normalizedQuery)
-
-    if (!existingChat) {
-      setChats((prev) => [nextChat, ...prev])
-    }
-
-    setRecentItems((prev) => {
-      const withoutDuplicate = prev.filter((item) => item.id !== nextChat.id)
-      return [{ id: nextChat.id }, ...withoutDuplicate].slice(0, 8)
+  // 1) Call backend
+  let data
+  try {
+    const res = await fetch(`${BACKEND_URL}/query`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question: normalizedQuery, org_id: "demo", top_k: 10 }),
     })
-
-    setActiveChatId(nextChat.id)
-    setQuery('')
-    setPage('result')
-    setResultTab('answer')
-    setActiveButton('menu-threads')
+    if (!res.ok) {
+      const text = await res.text()
+      throw new Error(`Backend error ${res.status}: ${text}`)
+    }
+    data = await res.json()
+  } catch (err) {
+    console.error(err)
+    // fallback: show an error chat card
+    const errorChat = {
+      id: `chat-${Date.now()}`,
+      title: normalizedQuery,
+      tags: ["#error"],
+      resultCount: 0,
+      summary: `Backend request failed: ${err.message}`,
+      sections: [],
+      sources: [],
+    }
+    setChats((prev) => [errorChat, ...prev])
+    setActiveChatId(errorChat.id)
+    setQuery("")
+    setPage("result")
+    setResultTab("answer")
+    setActiveButton("menu-threads")
+    return
   }
+
+  // 2) Convert backend response -> UI chat format
+  const decisions = data.decisions ?? []
+
+  const nextChat = {
+    id: `chat-${Date.now()}`,
+    title: normalizedQuery,
+    tags: ["#rag", "#decisions"],
+    resultCount: decisions.length,
+    summary:
+      decisions.length === 0
+        ? "No decisions found in the retrieved context."
+        : `Found ${decisions.length} decision(s) from retrieved context.`,
+    sections: decisions.map((d, i) => ({
+      heading: `${i + 1}. ${d.title || "Decision"}`,
+      body: `${d.decision || ""}${d.owner ? `\n\nOwner: ${d.owner}` : ""}`,
+    })),
+    sources: (data.sources ?? []).map((s, i) => ({
+      id: s.id ?? `src-${Date.now()}-${i}`,
+      title: s.title ?? "Source",
+      excerpt: s.excerpt ?? "",
+    })),
+  }
+
+  // 3) Update UI state like before
+  setChats((prev) => [nextChat, ...prev])
+  setRecentItems((prev) => [{ id: nextChat.id }, ...prev].slice(0, 8))
+  setActiveChatId(nextChat.id)
+  setQuery("")
+  setPage("result")
+  setResultTab("answer")
+  setActiveButton("menu-threads")
+}
 
   const handleDeleteChat = (chatId) => {
     const updatedChats = chats.filter((chat) => chat.id !== chatId)
