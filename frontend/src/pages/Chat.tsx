@@ -1,8 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
-import { Link, useSearchParams } from "react-router";
+import { Link, useSearchParams, useNavigate } from "react-router";
 import SpotlightCard from "../components/reactbits/SpotlightCard";
 import type { Citation, TimelineEvent } from "../types";
 import { findThread, threads } from "../data/threads";
+import { useThreads } from "../context/ThreadsContext";
 
 /* ───────────────────────── Helpers ───────────────────────── */
 
@@ -119,29 +120,37 @@ function renderAnswer(text: string, _citations: Citation[]) {
 
 export function Chat() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { addThread } = useThreads();
   const [loading, setLoading] = useState(true);
   const [followUpValue, setFollowUpValue] = useState("");
   const [searchPhase, setSearchPhase] = useState(0); // 0 = searching, 1 = done
 
+  const query = searchParams.get("q") || "Why did we choose Lambda over ECS for the payment service?";
+  const thread = useMemo(() => findThread(query), [query]);
+  const activeThread = thread || threads[0];
+
+  // Add this query to the sidebar threads
+  useEffect(() => {
+    addThread(query);
+  }, [query, addThread]);
+
   // Loading + search progress animation
   useEffect(() => {
+    setLoading(true);
+    setSearchPhase(0);
     const t1 = setTimeout(() => setSearchPhase(1), 800);
     const t2 = setTimeout(() => setLoading(false), 1500);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
     };
-  }, []);
+  }, [query]);
 
   function handleFollowUp(value: string) {
-    console.log("Follow-up:", value);
+    addThread(value);
+    navigate(`/chat/new?q=${encodeURIComponent(value)}`);
   }
-
-  const query = searchParams.get("q") || "Why did we choose Lambda over ECS for the payment service?";
-  const thread = useMemo(() => findThread(query), [query]);
-
-  // Fall back to first thread if no match
-  const activeThread = thread || threads[0];
 
   function handleCopy() {
     navigator.clipboard.writeText(activeThread.answer);

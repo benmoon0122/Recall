@@ -4,6 +4,7 @@ import Aurora from "../components/reactbits/Aurora";
 import SplitText from "../components/reactbits/SplitText";
 import SpotlightCard from "../components/reactbits/SpotlightCard";
 import OrbShader from "../components/OrbShader";
+import { useThreads } from "../context/ThreadsContext";
 import type { SourceType } from "../types";
 
 const actionPills = [
@@ -30,12 +31,14 @@ const recentCards: {
 
 export function Home() {
   const navigate = useNavigate();
+  const { addThread } = useThreads();
   const [query, setQuery] = useState("");
   const [searchFocused, setSearchFocused] = useState(false);
 
   function handleSubmit(e?: FormEvent) {
     e?.preventDefault();
     if (!query.trim()) return;
+    addThread(query.trim());
     navigate(`/chat/new?q=${encodeURIComponent(query.trim())}`);
   }
 

@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router";
+import { useThreads } from "../context/ThreadsContext";
 
 const navItems = [
   { label: "Threads", path: "/", icon: "forum" },
@@ -6,19 +7,16 @@ const navItems = [
   { label: "Sources", path: "/sources", icon: "link" },
 ];
 
-const recentItems = [
-  { label: "Postgres Rate Limits", path: "/chat/1" },
-  { label: "React Perf Audit", path: "/chat/2" },
-  { label: "Q3 Planning", path: "/chat/3" },
-];
-
 export function Sidebar() {
   const location = useLocation();
+  const { threads } = useThreads();
 
   function isActive(path: string) {
     if (path === "/") return location.pathname === "/";
     return location.pathname.startsWith(path);
   }
+
+  const currentQuery = new URLSearchParams(location.search).get("q") ?? "";
 
   return (
     <aside className="w-[220px] flex-shrink-0 flex flex-col glass-sidebar h-full z-20">
@@ -43,7 +41,7 @@ export function Sidebar() {
       </div>
 
       {/* Nav items */}
-      <nav className="flex-1 flex flex-col gap-0.5 px-2 pt-1">
+      <nav className="flex-1 flex flex-col gap-0.5 px-2 pt-1 min-h-0">
         {navItems.map((item) => {
           const active = isActive(item.path);
           return (
@@ -68,18 +66,20 @@ export function Sidebar() {
           );
         })}
 
-        {/* Recent section */}
-        <div className="mt-4 pt-4 border-t border-white/[0.06] px-1">
+        {/* Recent threads */}
+        <div className="mt-4 pt-4 border-t border-white/[0.06] px-1 flex-1 min-h-0 overflow-y-auto">
           <p className="text-[11px] font-semibold text-text-muted uppercase tracking-wider mb-2 px-2">
             Recent
           </p>
           <div className="flex flex-col gap-0.5">
-            {recentItems.map((item) => {
-              const active = location.pathname === item.path;
+            {threads.map((thread) => {
+              const active =
+                location.pathname.startsWith("/chat") &&
+                currentQuery === thread.query;
               return (
                 <Link
-                  key={item.path}
-                  to={item.path}
+                  key={thread.id}
+                  to={`/chat/new?q=${encodeURIComponent(thread.query)}`}
                   className={`flex items-center gap-2.5 px-2 py-1.5 rounded-lg transition-all group ${
                     active
                       ? "bg-primary/15 text-primary"
@@ -87,13 +87,13 @@ export function Sidebar() {
                   }`}
                 >
                   <span
-                    className={`material-symbols-outlined text-[8px] ${
+                    className={`material-symbols-outlined text-[8px] shrink-0 ${
                       active ? "text-primary" : "text-text-muted group-hover:text-text-secondary"
                     }`}
                   >
                     fiber_manual_record
                   </span>
-                  <span className="text-sm font-medium truncate">{item.label}</span>
+                  <span className="text-sm font-medium truncate">{thread.label}</span>
                 </Link>
               );
             })}

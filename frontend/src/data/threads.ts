@@ -111,12 +111,12 @@ export const threads: ThreadData[] = [
     ],
     sidebar: {
       entities: [
-        { icon: "zap", iconColor: "text-yellow-400", name: "Serverless Architecture", type: "Concept" },
-        { icon: "users", iconColor: "text-blue-400", name: "AWS Platform Team", type: "Group" },
+        { icon: "bolt", iconColor: "#facc15", name: "Serverless Architecture", type: "Concept" },
+        { icon: "people", iconColor: "#60a5fa", name: "AWS Platform Team", type: "Group" },
       ],
       files: [
-        { icon: "file-code", name: "payment-lambda/handler.ts" },
-        { icon: "file-code", name: "infra/cdk/payment-stack.ts" },
+        { icon: "code", name: "payment-lambda/handler.ts" },
+        { icon: "code", name: "infra/cdk/payment-stack.ts" },
       ],
     },
   },
@@ -216,12 +216,12 @@ export const threads: ThreadData[] = [
     ],
     sidebar: {
       entities: [
-        { icon: "database", iconColor: "text-orange-400", name: "Data Modeling", type: "Concept" },
-        { icon: "users", iconColor: "text-green-400", name: "Backend Team", type: "Group" },
+        { icon: "storage", iconColor: "#fb923c", name: "Data Modeling", type: "Concept" },
+        { icon: "people", iconColor: "#4ade80", name: "Backend Team", type: "Group" },
       ],
       files: [
-        { icon: "file-code", name: "payment-lambda/src/db.ts" },
-        { icon: "file-code", name: "infra/cdk/dynamodb-stack.ts" },
+        { icon: "code", name: "payment-lambda/src/db.ts" },
+        { icon: "code", name: "infra/cdk/dynamodb-stack.ts" },
       ],
     },
   },
@@ -321,12 +321,12 @@ export const threads: ThreadData[] = [
     ],
     sidebar: {
       entities: [
-        { icon: "brain", iconColor: "text-purple-400", name: "AI/ML Pipeline", type: "Concept" },
-        { icon: "users", iconColor: "text-pink-400", name: "ML Platform Team", type: "Group" },
+        { icon: "psychology", iconColor: "#c084fc", name: "AI/ML Pipeline", type: "Concept" },
+        { icon: "people", iconColor: "#f472b6", name: "ML Platform Team", type: "Group" },
       ],
       files: [
-        { icon: "file-code", name: "ml-pipeline/src/embeddings.py" },
-        { icon: "file-code", name: "infra/cdk/bedrock-stack.ts" },
+        { icon: "code", name: "ml-pipeline/src/embeddings.py" },
+        { icon: "code", name: "infra/cdk/bedrock-stack.ts" },
       ],
     },
   },
@@ -426,12 +426,12 @@ export const threads: ThreadData[] = [
     ],
     sidebar: {
       entities: [
-        { icon: "layers", iconColor: "text-cyan-400", name: "Infrastructure as Code", type: "Concept" },
-        { icon: "users", iconColor: "text-red-400", name: "DevOps Team", type: "Group" },
+        { icon: "layers", iconColor: "#22d3ee", name: "Infrastructure as Code", type: "Concept" },
+        { icon: "people", iconColor: "#f87171", name: "DevOps Team", type: "Group" },
       ],
       files: [
-        { icon: "file-code", name: "infra/cdk/pipeline-stack.ts" },
-        { icon: "file-code", name: "infra/cdk/app.ts" },
+        { icon: "code", name: "infra/cdk/pipeline-stack.ts" },
+        { icon: "code", name: "infra/cdk/app.ts" },
       ],
     },
   },
@@ -531,12 +531,12 @@ export const threads: ThreadData[] = [
     ],
     sidebar: {
       entities: [
-        { icon: "database", iconColor: "text-emerald-400", name: "Data Architecture", type: "Concept" },
-        { icon: "users", iconColor: "text-amber-400", name: "Data Platform Team", type: "Group" },
+        { icon: "database", iconColor: "#34d399", name: "Data Architecture", type: "Concept" },
+        { icon: "people", iconColor: "#fbbf24", name: "Data Platform Team", type: "Group" },
       ],
       files: [
-        { icon: "file-code", name: "data-lake/glue/etl-job.py" },
-        { icon: "file-code", name: "infra/cdk/data-lake-stack.ts" },
+        { icon: "code", name: "data-lake/glue/etl-job.py" },
+        { icon: "code", name: "infra/cdk/data-lake-stack.ts" },
       ],
     },
   },
@@ -637,12 +637,12 @@ export const threads: ThreadData[] = [
     ],
     sidebar: {
       entities: [
-        { icon: "shield", iconColor: "text-blue-400", name: "Identity & Access", type: "Concept" },
-        { icon: "users", iconColor: "text-violet-400", name: "Security Team", type: "Group" },
+        { icon: "shield", iconColor: "#60a5fa", name: "Identity & Access", type: "Concept" },
+        { icon: "people", iconColor: "#a78bfa", name: "Security Team", type: "Group" },
       ],
       files: [
-        { icon: "file-code", name: "auth-service/src/cognito.ts" },
-        { icon: "file-code", name: "infra/cdk/auth-stack.ts" },
+        { icon: "code", name: "auth-service/src/cognito.ts" },
+        { icon: "code", name: "infra/cdk/auth-stack.ts" },
       ],
     },
   },
@@ -743,12 +743,12 @@ export const threads: ThreadData[] = [
     ],
     sidebar: {
       entities: [
-        { icon: "globe", iconColor: "text-teal-400", name: "Edge Computing", type: "Concept" },
-        { icon: "users", iconColor: "text-sky-400", name: "Platform Team", type: "Group" },
+        { icon: "public", iconColor: "#2dd4bf", name: "Edge Computing", type: "Concept" },
+        { icon: "people", iconColor: "#38bdf8", name: "Platform Team", type: "Group" },
       ],
       files: [
-        { icon: "file-code", name: "edge/lambda-at-edge/router.ts" },
-        { icon: "file-code", name: "infra/cdk/cdn-stack.ts" },
+        { icon: "code", name: "edge/lambda-at-edge/router.ts" },
+        { icon: "code", name: "infra/cdk/cdn-stack.ts" },
       ],
     },
   },

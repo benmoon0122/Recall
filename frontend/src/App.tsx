@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router";
 import { Sidebar } from "./components/Sidebar";
 import { TopBar } from "./components/TopBar";
+import { ThreadsProvider } from "./context/ThreadsContext";
 import { Home } from "./pages/Home";
 import { Search } from "./pages/Search";
 import { Chat } from "./pages/Chat";
@@ -12,17 +13,19 @@ import { Sources } from "./pages/Sources";
 
 function Layout() {
   return (
-    <div className="h-screen w-full text-text-primary font-sans overflow-hidden">
-      <div className="flex h-full w-full overflow-hidden">
-        <Sidebar />
-        <div className="flex-1 min-w-0 flex flex-col h-full overflow-hidden">
-          <TopBar />
-          <main className="flex-1 min-w-0 flex flex-col h-full overflow-hidden bg-surface backdrop-blur-xl">
-            <Outlet />
-          </main>
+    <ThreadsProvider>
+      <div className="h-screen w-full text-text-primary font-sans overflow-hidden">
+        <div className="flex h-full w-full overflow-hidden">
+          <Sidebar />
+          <div className="flex-1 min-w-0 flex flex-col h-full overflow-hidden">
+            <TopBar />
+            <main className="flex-1 min-w-0 flex flex-col h-full overflow-hidden bg-surface backdrop-blur-xl">
+              <Outlet />
+            </main>
+          </div>
         </div>
       </div>
-    </div>
+    </ThreadsProvider>
   );
 }
 
