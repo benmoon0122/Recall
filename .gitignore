@@ -1,2 +1,9 @@
 backend/venv
 backend/__pycache__
+
+# Claude
+.claude/
+
+# Docs and specs
+*.md
+docs/
