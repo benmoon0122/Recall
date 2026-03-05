@@ -8,6 +8,13 @@ import threadsIcon from './assets/threads.svg'
 import knowledgeBaseIcon from './assets/knowledge_base.svg'
 import projectsIcon from './assets/projects.svg'
 import settingsIcon from './assets/settings.svg'
+import slackLogo from './assets/slack.png'
+import gmailLogo from './assets/gmail.svg'
+import meetingsLogo from './assets/meetings.svg'
+import dbIcon from './assets/DB.svg'
+import linkIcon from './assets/link.svg'
+import lockIcon from './assets/lock.svg'
+import cancelIcon from './assets/cancel.svg'
 import { useState } from 'react'
 
 function Icon({ children }) {
@@ -19,17 +26,20 @@ function App() {
   const [activeChip, setActiveChip] = useState('chip-all')
   const [page, setPage] = useState('home')
   const [query, setQuery] = useState('Why did we choose Postgres over DynamoDB?')
+  const [isManageOpen, setIsManageOpen] = useState(false)
+  const [autoConnect, setAutoConnect] = useState(true)
+  const [longMemory, setLongMemory] = useState(false)
 
   const primaryNav = [
     { id: 'menu-threads', label: 'Threads', icon: threadsIcon },
     { id: 'menu-kb', label: 'Knowledge Base', icon: knowledgeBaseIcon },
     { id: 'menu-projects', label: 'Projects', icon: projectsIcon },
-    { id: 'menu-settings', label: 'Settings', icon: settingsIcon },
+    { id: 'menu-settings', label: 'Service Management', icon: settingsIcon },
   ]
 
   const recentItems = [
-    { id: 'recent-postgres', label: 'Postgres Rate Limits' },
-    { id: 'recent-react-perf', label: 'React Perf Audit' },
+    { id: 'recent-architecture', label: 'Architecture Review' },
+    { id: 'recent-api', label: 'API Documentation' },
     { id: 'recent-q3', label: 'Q3 Planning' },
   ]
 
@@ -54,9 +64,10 @@ function App() {
 
   const handlePrimaryNav = (itemId) => {
     setActiveButton(itemId)
-    if (itemId === 'menu-threads') {
-      setPage('home')
-    }
+    if (itemId === 'menu-threads') setPage('home')
+    if (itemId === 'menu-kb') setPage('placeholder')
+    if (itemId === 'menu-settings') setPage('service')
+    if (itemId === 'menu-projects') setPage('projects')
   }
 
   const handleSearchSubmit = (event) => {
@@ -116,7 +127,8 @@ function App() {
       </aside>
 
       <main className="main-content">
-        {page === 'home' ? (
+        <div className="page-transition" key={`${page}-${activeButton}`}>
+          {page === 'home' ? (
           <>
             <div className="content-inner">
               <h1>Search across your universe.</h1>
@@ -208,7 +220,7 @@ function App() {
               </div>
             </footer>
           </>
-        ) : (
+          ) : page === 'result' ? (
           <div className="result-layout">
             <section className="result-main">
               <header className="result-toolbar">
@@ -286,8 +298,210 @@ function App() {
               </section>
             </aside>
           </div>
-        )}
+          ) : page === 'service' ? (
+          <div className="service-page">
+            <header className="service-header">
+              <div>
+                <h2 className="service-title">Service Management</h2>
+                <p className="service-subtitle">
+                  Manage your connected data sources and sync status
+                </p>
+                <div className="service-stats">
+                  <span>
+                    <img src={dbIcon} alt="" />
+                    97,756 Total Items
+                  </span>
+                  <span>
+                    <span className="service-dot" />3 Connected
+                  </span>
+                  <span>2m ago Last Sync</span>
+                </div>
+              </div>
+              <div className="service-actions">
+                <button className="connect-btn" type="button">
+                  <img src={linkIcon} alt="" />
+                  Connect New Source
+                </button>
+                <p className="service-note">
+                  <img src={lockIcon} alt="" />
+                  Only you can search your connected accounts
+                </p>
+              </div>
+            </header>
+
+            <section className="service-grid">
+              <article className="integration-card">
+                <div className="integration-head">
+                  <div className="integration-id">
+                    <img className="integration-logo" src={slackLogo} alt="" />
+                    <div>
+                      <h3>Slack</h3>
+                      <p>Communication</p>
+                    </div>
+                  </div>
+                  <span className="badge-connected">Connected</span>
+                </div>
+                <div className="integration-metrics">
+                  <div>
+                    <p>Messages</p>
+                    <strong>85.2k</strong>
+                  </div>
+                  <div>
+                    <p>Last Sync</p>
+                    <strong>5m ago</strong>
+                  </div>
+                </div>
+                <div className="integration-footer">
+                  <span>Auto-sync enabled</span>
+                  <button className="manage-btn" onClick={() => setIsManageOpen(true)} type="button">
+                    <img src={settingsIcon} alt="" />
+                    Manage
+                  </button>
+                </div>
+              </article>
+
+              <article className="integration-card">
+                <div className="integration-head">
+                  <div className="integration-id">
+                    <img className="integration-logo" src={gmailLogo} alt="" />
+                    <div>
+                      <h3>Gmail</h3>
+                      <p>Email</p>
+                    </div>
+                  </div>
+                  <span className="badge-connected">Connected</span>
+                </div>
+                <div className="integration-metrics">
+                  <div>
+                    <p>Emails</p>
+                    <strong>12.5k</strong>
+                  </div>
+                  <div>
+                    <p>Last Sync</p>
+                    <strong>10m ago</strong>
+                  </div>
+                </div>
+                <div className="integration-footer">
+                  <span>Auto-sync enabled</span>
+                  <button className="manage-btn" onClick={() => setIsManageOpen(true)} type="button">
+                    <img src={settingsIcon} alt="" />
+                    Manage
+                  </button>
+                </div>
+              </article>
+
+              <article className="integration-card">
+                <div className="integration-head">
+                  <div className="integration-id">
+                    <img className="integration-logo meeting-logo" src={meetingsLogo} alt="" />
+                    <div>
+                      <h3>Meeting Transcripts</h3>
+                      <p>Audio &amp; Video</p>
+                    </div>
+                  </div>
+                  <span className="badge-syncing">Syncing...</span>
+                </div>
+                <div className="integration-metrics">
+                  <div>
+                    <p>Transcripts</p>
+                    <strong>218</strong>
+                  </div>
+                  <div>
+                    <p>Last Sync</p>
+                    <strong>Now</strong>
+                  </div>
+                </div>
+                <div className="sync-progress">
+                  <p>Step 2/2: Embedding with Nova... 156 of 218 transcripts</p>
+                  <div className="sync-row">
+                    <span>Sync in progress: 72%</span>
+                    <div className="sync-track">
+                      <div className="sync-value" />
+                    </div>
+                    <button className="cancel-btn" type="button">
+                      <img src={cancelIcon} alt="" />
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </article>
+
+              <article className="add-card">
+                <button className="plus-icon" type="button">
+                  +
+                </button>
+                <h3>Add New Source</h3>
+                <p>Connect Notion, Jira, Linear, and more to expand your knowledge base.</p>
+              </article>
+            </section>
+          </div>
+          ) : (
+          <div className="placeholder-page">
+            <h2>{activeButton === 'menu-kb' ? 'Knowledge Base' : 'Projects'}</h2>
+            <p>
+              {activeButton === 'menu-kb'
+                ? 'This page is ready for your knowledge base design.'
+                : 'This page is ready for your next design screen.'}
+            </p>
+          </div>
+          )}
+        </div>
       </main>
+
+      {isManageOpen && (
+        <div
+          aria-hidden="true"
+          className="modal-backdrop"
+          onClick={() => setIsManageOpen(false)}
+          role="presentation"
+        >
+          <section
+            aria-label="Source settings"
+            className="manage-modal"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              aria-label="Close settings"
+              className="modal-close"
+              onClick={() => setIsManageOpen(false)}
+              type="button"
+            >
+              ×
+            </button>
+            <h3>Source Settings</h3>
+
+            <div className="switch-row">
+              <div>
+                <p className="switch-title">Auto connect</p>
+                <p className="switch-subtext">Off means manual connect.</p>
+              </div>
+              <button
+                aria-pressed={autoConnect}
+                className={`toggle ${autoConnect ? 'on' : ''}`}
+                onClick={() => setAutoConnect((value) => !value)}
+                type="button"
+              >
+                <span />
+              </button>
+            </div>
+
+            <div className="switch-row">
+              <div>
+                <p className="switch-title">Remember 30 days</p>
+                <p className="switch-subtext">Off means remember 7 days.</p>
+              </div>
+              <button
+                aria-pressed={longMemory}
+                className={`toggle ${longMemory ? 'on' : ''}`}
+                onClick={() => setLongMemory((value) => !value)}
+                type="button"
+              >
+                <span />
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
     </div>
   )
 }
