@@ -1,102 +1,8 @@
 import { useState, useEffect } from "react";
-import { Link, useSearchParams } from "react-router";
+import { Link, useParams, useSearchParams } from "react-router";
 import SpotlightCard from "../components/reactbits/SpotlightCard";
-import type { Citation, TimelineEvent } from "../types";
-
-/* ───────────────────────── Mock data ───────────────────────── */
-
-const mockQuery = "Why did we choose Postgres over DynamoDB?";
-
-const mockCitations: Citation[] = [
-  {
-    number: 1,
-    source_type: "slack",
-    title: "#backend",
-    snippet:
-      "Sarah Chen: Been running load tests on DynamoDB and the costs are getting crazy at our scale...",
-    author: "Sarah Chen",
-    timestamp: "2024-02-03T09:15:00Z",
-  },
-  {
-    number: 2,
-    source_type: "meeting",
-    title: "Architecture Review",
-    snippet:
-      "CTO: OK I'm convinced. Let's go with Postgres. Jordan, can you lead?",
-    author: null,
-    timestamp: "2024-02-05T14:00:00Z",
-  },
-  {
-    number: 3,
-    source_type: "gmail",
-    title: "Re: Database decision - confirmed: Postgres",
-    snippet:
-      "After the architecture review, we're going with Postgres. Jordan will lead the migration.",
-    author: "David Park (CTO)",
-    timestamp: "2024-02-06T09:00:00Z",
-  },
-];
-
-const mockTimeline: TimelineEvent[] = [
-  {
-    timestamp: "2024-02-03T09:15:00Z",
-    source_type: "slack",
-    title: "Sarah raised DynamoDB concerns",
-    snippet:
-      "Been running load tests on DynamoDB and the costs are getting crazy at our scale...",
-    author: "Sarah Chen",
-    channel_or_subject: "#backend",
-  },
-  {
-    timestamp: "2024-02-04T10:00:00Z",
-    source_type: "gmail",
-    title: "Database evaluation sent to eng-leads",
-    snippet:
-      "Detailed comparison doc with cost analysis, benchmark results...",
-    author: "Sarah Chen",
-    channel_or_subject: "Database evaluation: Postgres vs DynamoDB",
-  },
-  {
-    timestamp: "2024-02-05T14:00:00Z",
-    source_type: "meeting",
-    title: "Architecture Review - team voted Postgres",
-    snippet:
-      "CTO: OK I'm convinced. Let's go with Postgres. Jordan, can you lead?",
-    author: null,
-    channel_or_subject: "Architecture Review - Database Migration",
-  },
-  {
-    timestamp: "2024-02-06T09:00:00Z",
-    source_type: "gmail",
-    title: "CTO confirmed decision",
-    snippet:
-      "After the architecture review, we're going with Postgres...",
-    author: "David Park",
-    channel_or_subject: "Re: Database decision - confirmed: Postgres",
-  },
-  {
-    timestamp: "2024-02-10T14:15:00Z",
-    source_type: "slack",
-    title: "Migration complete",
-    snippet:
-      "All tests green. Payment service now running on Postgres. Latency down 40%.",
-    author: "Jordan Lee",
-    channel_or_subject: "#backend",
-  },
-];
-
-const mockAnswer = `Based on architectural discussions in February 2024, the team chose PostgreSQL over DynamoDB primarily due to three factors:
-
-**1. Complex Relational Queries**
-Our access patterns require complex joins across User, Organization, and Billing entities. DynamoDB would have required maintaining secondary indexes and duplicating data [1].
-
-**2. ACID Compliance for Billing**
-Strict transactional integrity was a hard requirement for the new billing service. Postgres provides native support, whereas DynamoDB requires complex application-level logic [2].
-
-**3. Team Expertise**
-The engineering team already has deep operational expertise with RDS Postgres, reducing learning curve and operational risk [3].
-
-The decision was finalized in the Architecture Review on Feb 5, with CTO David Park giving final approval via email the following day.`;
+import type { Citation } from "../types";
+import { chatMocksById, defaultChatMock } from "../data/chats";
 
 /* ───────────────────────── Helpers ───────────────────────── */
 
@@ -212,6 +118,7 @@ function renderAnswer(text: string, _citations: Citation[]) {
 /* ───────────────────────── Component ───────────────────────── */
 
 export function Chat() {
+  const { id } = useParams();
   const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [followUpValue, setFollowUpValue] = useState("");
@@ -231,11 +138,22 @@ export function Chat() {
     console.log("Follow-up:", value);
   }
 
+  const mockChat = (id && chatMocksById[id]) || defaultChatMock;
+  const query = searchParams.get("q") || mockChat.query;
+
   function handleCopy() {
-    navigator.clipboard.writeText(mockAnswer);
+    navigator.clipboard.writeText(mockChat.answer);
   }
 
-  const query = searchParams.get("q") || mockQuery;
+  const sourceCounts = mockChat.citations.reduce(
+    (acc, citation) => {
+      if (citation.source_type === "slack") acc.slack += 1;
+      if (citation.source_type === "meeting") acc.meeting += 1;
+      if (citation.source_type === "gmail") acc.gmail += 1;
+      return acc;
+    },
+    { slack: 0, meeting: 0, gmail: 0 }
+  );
 
   return (
     <div className="flex-1 flex min-w-0 overflow-hidden">
@@ -265,15 +183,15 @@ export function Chat() {
 
           {/* 3. Meta */}
           <p className="text-[12px] text-text-muted mb-5">
-            10:12 AM &middot; Searching: All Sources
+            {mockChat.timeLabel} &middot; Searching: All Sources
           </p>
 
           {/* 4. Source type tags */}
           <div className="flex items-center gap-2 mb-5">
             {[
-              { type: "slack", count: 8, label: "messages" },
-              { type: "meeting", count: 1, label: "transcript" },
-              { type: "gmail", count: 2, label: "emails" },
+              { type: "slack", count: sourceCounts.slack, label: "messages" },
+              { type: "meeting", count: sourceCounts.meeting, label: "transcript" },
+              { type: "gmail", count: sourceCounts.gmail, label: "emails" },
             ].map((s) => {
               const meta = SOURCE_META[s.type];
               return (
@@ -296,7 +214,7 @@ export function Chat() {
               <>
                 <span className="text-status-success text-[14px]">&#10003;</span>
                 <span>
-                  Searched across 3 sources &middot; Found 11 results
+                  Searched across {mockChat.sourcesSearched} sources &middot; Found {mockChat.foundResults} results
                 </span>
               </>
             ) : (
@@ -334,7 +252,7 @@ export function Chat() {
             <div className="animate-fade-in">
               {/* 6. Source cards strip */}
               <div className="grid grid-cols-3 gap-4 mb-10">
-                {mockCitations.map((c) => {
+                {mockChat.citations.map((c) => {
                   const meta = SOURCE_META[c.source_type];
                   return (
                     <SpotlightCard
@@ -373,7 +291,7 @@ export function Chat() {
                   <span className="material-symbols-outlined text-[18px] text-primary">auto_awesome</span>
                   <h3 className="text-[11px] font-semibold uppercase tracking-wider text-text-muted">AI Analysis</h3>
                 </div>
-                {renderAnswer(mockAnswer, mockCitations)}
+                {renderAnswer(mockChat.answer, mockChat.citations)}
               </div>
 
               {/* 8. Action buttons */}
@@ -432,9 +350,9 @@ export function Chat() {
                   Decision Timeline
                 </h3>
                 <div className="relative">
-                  {mockTimeline.map((event, idx) => {
+                  {mockChat.timeline.map((event, idx) => {
                     const meta = SOURCE_META[event.source_type];
-                    const isLast = idx === mockTimeline.length - 1;
+                    const isLast = idx === mockChat.timeline.length - 1;
                     const dotColor = sourceColor(event.source_type);
 
                     return (
@@ -485,11 +403,7 @@ export function Chat() {
 
               {/* 10. Follow-up pills */}
               <div className="flex flex-wrap gap-2 mb-5">
-                {[
-                  "What was the cost comparison?",
-                  "Who led the migration?",
-                  "What did our team decide about this?",
-                ].map((label) => (
+                {mockChat.followUps.map((label) => (
                   <button
                     key={label}
                     type="button"
