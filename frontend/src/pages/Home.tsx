@@ -115,22 +115,8 @@ export function Home() {
                     <span className="material-symbols-outlined text-[16px]">attach_file</span>
                     Attach
                   </button>
-                  <button type="button" className="inline-flex items-center gap-1.5 text-xs text-text-muted hover:text-text-secondary transition-colors cursor-pointer">
-                    <span className="material-symbols-outlined text-[16px]">tune</span>
-                    Settings
-                  </button>
-                  <button type="button" className="inline-flex items-center gap-1.5 text-xs text-text-muted hover:text-text-secondary transition-colors cursor-pointer">
-                    <span className="material-symbols-outlined text-[16px]">grid_view</span>
-                    Options
-                  </button>
                 </div>
                 <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    className="w-8 h-8 rounded-full flex items-center justify-center glass-button text-text-muted cursor-pointer"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">mic</span>
-                  </button>
                   <button
                     type="submit"
                     className={`w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer shrink-0 ${

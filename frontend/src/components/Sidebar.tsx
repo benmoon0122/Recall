@@ -4,7 +4,6 @@ const navItems = [
   { label: "Threads", path: "/", icon: "forum" },
   { label: "Knowledge Base", path: "/knowledge-base", icon: "library_books" },
   { label: "Sources", path: "/sources", icon: "link" },
-  { label: "Settings", path: "/settings", icon: "settings" },
 ];
 
 const recentItems = [
@@ -101,6 +100,27 @@ export function Sidebar() {
           </div>
         </div>
       </nav>
+
+      {/* Settings */}
+      <div className="px-2 mb-1">
+        <Link
+          to="/settings"
+          className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all group ${
+            isActive("/settings")
+              ? "bg-primary/15 text-primary"
+              : "text-text-secondary hover:bg-white/[0.06] hover:text-text-primary"
+          }`}
+        >
+          <span
+            className={`material-symbols-outlined text-[20px] transition-colors ${
+              isActive("/settings") ? "text-primary" : "text-text-muted group-hover:text-text-secondary"
+            }`}
+          >
+            settings
+          </span>
+          <span className="text-sm font-medium">Settings</span>
+        </Link>
+      </div>
 
       {/* User profile */}
       <div className="p-3 border-t border-white/[0.06]">
