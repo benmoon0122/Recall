@@ -1,12 +1,104 @@
 [
   {
     "ts": "1700000000.000100",
+    "thread_ts": "1700000000.000100",
     "user": "U123",
-    "text": "We should store embeddings in pgvector."
+    "text": "We need to decide on the primary database. I've been evaluating PostgreSQL vs DynamoDB for our transactional workloads."
   },
   {
     "ts": "1700000060.000200",
+    "thread_ts": "1700000000.000100",
     "user": "U456",
-    "text": "Agreed. Let's use Nova embeddings and retrieve top-k."
+    "text": "Postgres makes more sense for us. We have complex joins across billing, org, and user tables. DynamoDB's single-table design would add a lot of complexity."
+  },
+  {
+    "ts": "1700000120.000300",
+    "thread_ts": "1700000000.000100",
+    "user": "U123",
+    "text": "Agreed. We also need ACID compliance for billing flows. Postgres gives us native transactional guarantees. Decision: go with PostgreSQL as the primary store. I'll own the migration plan."
+  },
+  {
+    "ts": "1700000180.000400",
+    "thread_ts": "1700000000.000100",
+    "user": "U456",
+    "text": "Sounds good. We can keep DynamoDB as an option for specific key-value caching scenarios later. The team already has deep Postgres experience which reduces risk."
+  },
+  {
+    "ts": "1700001000.000500",
+    "thread_ts": "1700001000.000500",
+    "user": "U456",
+    "text": "Heads up: we saw an API latency spike after yesterday's deploy. p95 went from 240ms to 1.4s on /v1/feed. Cache hit rate dropped from 93% to 61%."
+  },
+  {
+    "ts": "1700001060.000600",
+    "thread_ts": "1700001000.000500",
+    "user": "U123",
+    "text": "I looked into it. The deploy triggered a broad cache invalidation pattern that increased misses. The read replica connection pool also got saturated — it was pegged at the limit for about 18 minutes."
+  },
+  {
+    "ts": "1700001120.000700",
+    "thread_ts": "1700001000.000500",
+    "user": "U456",
+    "text": "Mitigation: I narrowed the invalidation scope and raised the replica pool limits. Also added request coalescing on hot cache keys. Latency is back to normal."
+  },
+  {
+    "ts": "1700001180.000800",
+    "thread_ts": "1700001000.000500",
+    "user": "U123",
+    "text": "Good. Let's document this in a postmortem. Primary trigger was invalidation fan-out, secondary was insufficient read capacity headroom. Decision: we'll add burst headroom to all read replicas going forward."
+  },
+  {
+    "ts": "1700002000.000900",
+    "thread_ts": "1700002000.000900",
+    "user": "U123",
+    "text": "For Q3 planning: I'm proposing we allocate 42% of engineering capacity to reliability, 28% to net-new features, and the rest to migration debt paydown."
+  },
+  {
+    "ts": "1700002060.001000",
+    "thread_ts": "1700002000.000900",
+    "user": "U456",
+    "text": "That makes sense. The platform migration tasks need to be pulled forward to de-risk our Q4 multi-region commitments. If we delay, we'll block enterprise deals."
+  },
+  {
+    "ts": "1700002120.001100",
+    "thread_ts": "1700002000.000900",
+    "user": "U123",
+    "text": "Decision: reliability gets priority this quarter. Growth work will be scoped as narrow experiments with strict success criteria instead of full launches. Ved owns the reliability workstream, I'll handle the migration track."
+  },
+  {
+    "ts": "1700003000.001200",
+    "thread_ts": "1700003000.001200",
+    "user": "U456",
+    "text": "We should figure out rate-limit tiers for the public API before launch. Current thinking: separate limits by workload type — interactive reads, bulk exports, and write-heavy operations."
+  },
+  {
+    "ts": "1700003060.001300",
+    "thread_ts": "1700003000.001200",
+    "user": "U123",
+    "text": "I like that. We should use token bucket for bursts and rolling-window caps for sustained traffic. Most of our throttling incidents come from bulk jobs scheduled at the top of the hour."
+  },
+  {
+    "ts": "1700003120.001400",
+    "thread_ts": "1700003000.001200",
+    "user": "U456",
+    "text": "Decision: three tiers with separate read/write budgets. We'll expose clear rate-limit headers so customers understand their limits and can predict throttling. Ved owns the implementation. Target: end of sprint 14."
+  },
+  {
+    "ts": "1700004000.001500",
+    "thread_ts": "1700004000.001500",
+    "user": "U123",
+    "text": "We need to store embeddings for our search feature. I've been looking at pgvector as the extension for PostgreSQL. It supports cosine similarity search natively."
+  },
+  {
+    "ts": "1700004060.001600",
+    "thread_ts": "1700004000.001500",
+    "user": "U456",
+    "text": "Agreed — pgvector keeps everything in one database instead of adding a separate vector store like Pinecone. We'll use Amazon Nova embeddings at 1024 dimensions and retrieve top-k with ORDER BY embedding <-> query_embedding."
+  },
+  {
+    "ts": "1700004120.001700",
+    "thread_ts": "1700004000.001500",
+    "user": "U123",
+    "text": "Decision: use pgvector with IVFFlat indexing. This keeps our architecture simple — one Postgres instance for both transactional data and vector search. We'll add the ivfflat index once we have enough data for it to be useful."
   }
 ]

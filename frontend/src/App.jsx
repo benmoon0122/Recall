@@ -413,7 +413,11 @@ function App() {
   try {
     const res = await fetch(`${BACKEND_URL}/query`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": "recall-demo-key",
+        "x-org-id": "00000000-0000-0000-0000-000000000001",
+      },
       body: JSON.stringify({ question: normalizedQuery, org_id: "demo", top_k: 10 }),
     })
     if (!res.ok) {
