@@ -1,2 +1,9 @@
 backend/venv
 backend/__pycache__
+backend/.env
+backend/local_index.json
+node_modules/
+.env
+documentation.md
+backend/.env
+backend/.env.local
